@@ -1,8 +1,7 @@
-// Flappy Bird in JavaScript using p5.js
-
 let bird;
 let pipes = [];
 let score = 0;
+let highScore = 0; // Variable to keep track of the high score
 
 function setup() {
   createCanvas(400, 600);
@@ -16,10 +15,12 @@ function draw() {
   bird.update();
   bird.show();
 
+  // Create new pipes at intervals
   if (frameCount % 100 == 0) {
     pipes.push(new Pipe());
   }
 
+  // Update and display pipes
   for (let i = pipes.length - 1; i >= 0; i--) {
     pipes[i].update();
     pipes[i].show();
@@ -55,11 +56,22 @@ function displayScore() {
   textSize(32);
   textAlign(RIGHT);
   text(score, width - 20, 40);
+
+  // Display high score
+  textSize(20);
+  textAlign(LEFT);
+  text('High Score: ' + highScore, 20, 40);
 }
 
 function gameOver() {
   bird.dead = true;
   noLoop();
+
+  // Update high score if current score is greater
+  if (score > highScore) {
+    highScore = score;
+  }
+
   fill(0);
   textSize(50);
   textAlign(CENTER);
@@ -79,10 +91,11 @@ class Bird {
   constructor() {
     this.y = height / 2;
     this.x = 100;
-    this.gravity = 0.8;
+    this.gravity = 0.75;
     this.lift = -12;
     this.velocity = 0;
     this.dead = false;
+    this.radius = 20;
   }
 
   flap() {
@@ -107,7 +120,7 @@ class Bird {
 
   show() {
     fill(0, 150, 255);
-    ellipse(this.x, this.y, 40, 40);
+    ellipse(this.x, this.y, this.radius * 2, this.radius * 2);
   }
 }
 
@@ -123,10 +136,15 @@ class Pipe {
   }
 
   hits(bird) {
+    let birdEdgeLeft = bird.x - bird.radius;
+    let birdEdgeRight = bird.x + bird.radius;
+    let birdEdgeTop = bird.y - bird.radius;
+    let birdEdgeBottom = bird.y + bird.radius;
+
     return (
-      bird.y < this.top ||
-      bird.y > height - this.bottom) &&
-      (bird.x > this.x && bird.x < this.x + this.w);
+      (birdEdgeTop < this.top || birdEdgeBottom > height - this.bottom) &&
+      (birdEdgeRight > this.x && birdEdgeLeft < this.x + this.w)
+    );
   }
 
   update() {
