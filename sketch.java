@@ -80,7 +80,7 @@ class Bird {
     this.y = height / 2;
     this.x = 100;
     this.gravity = 0.8;
-    this.lift = -15;
+    this.lift = -12;
     this.velocity = 0;
     this.dead = false;
   }
