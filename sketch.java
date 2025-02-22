@@ -59,7 +59,7 @@ function keyPressed() {
       bird.flap(); // Flap if the game is already started
     }
   }
-  if (key == 'r' && bird.dead) {
+  if (key == ' ' && bird.dead) {
     restartGame();
   }
 }
@@ -97,7 +97,7 @@ function gameOver() {
   textAlign(CENTER);
   text('Game Over!', width / 2, height / 3);
   textSize(30);
-  text('Press R to Restart', width / 2, height / 2);
+  text('Press SPACE to Restart', width / 2, height / 2);
 }
 
 function startGame() {
